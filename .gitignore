@@ -16,6 +16,8 @@ apps/*/.env.local
 
 # Medusa / DB
 medusa-db/
+.medusa/
+*.tsbuildinfo
 *.sqlite
 *.db
 
