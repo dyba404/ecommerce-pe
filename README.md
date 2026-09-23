@@ -14,7 +14,7 @@ Ecommerce elegante tipo dropshipping / DTC para mercado peruano. MVP: **solo rop
 ecommerce/
 ├── README.md  AGENTS.md  constitution.md
 ├── package.json  pnpm-workspace.yaml  .env.example  .gitignore
-├── docs/                    # 00..09, toda decisión documentada
+├── docs/                    # 00..14, toda decisión documentada
 ├── openspec/
 │   ├── specs/<dominio>/spec.md      # verdad actual
 │   └── changes/mvp-ropa/{proposal.md,design.md,tasks.md,specs/}  # cambio en curso
