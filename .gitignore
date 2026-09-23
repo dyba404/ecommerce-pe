@@ -1,0 +1,32 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+*.log
+.DS_Store
+Thumbs.db
+
+# env reales (nunca commitear)
+.env
+.env.local
+.env.*.local
+apps/*/.env
+apps/*/.env.local
+
+# Medusa / DB
+medusa-db/
+*.sqlite
+*.db
+
+# HyperFrames renders / capturas pesadas
+apps/studio-video/**/renders/
+apps/studio-video/**/capture/
+*.mp4
+*.mov
+!**/README.md
+
+# OS / editores
+.vscode/*
+!.vscode/extensions.json
+.idea/

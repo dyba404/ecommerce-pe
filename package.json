@@ -1,0 +1,18 @@
+{
+  "name": "ecommerce-pe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ecommerce PE ropa (Medusa DTC + Next.js). Specs OpenSpec, pagos Culqi+Stripe.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "typecheck": "node -e \"process.exitCode=1;console.error('BLOQUEADO: apps/backend sin scaffoldear. Ver docs/09-roadmap.md T1.')\"",
+    "lint": "node -e \"process.exitCode=1;console.error('BLOQUEADO: apps/storefront sin scaffoldear. Ver docs/09-roadmap.md T1.')\"",
+    "docs": "echo \"Docs en ./docs. Roadmap: docs/09-roadmap.md\""
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
