@@ -1,6 +1,8 @@
 # 10. Notificaciones (email + WhatsApp)
 
 ## Decisión email
+> **2026-09-23:** la guía oficial Medusa↔Resend (docs.medusajs.com) devuelve 404 y `medusa-plugin-resend` fue des-publicado de npm (2026-08-08). First-party solo existen `@medusajs/notification-local` y `@medusajs/notification-sendgrid`. Resend sigue como default vía **provider propio** (~un archivo: `AbstractNotificationProviderService` + API Resend + React Email); SendGrid oficial queda como alternativa cero-código.
+
 | Rol | Provider | Por qué |
 |---|---|---|
 | Default MVP | **Resend** | DX moderno (React Email en JSX), setup 15 min, free 3k/mes, Pro $20/50k. Transaccional puro. |
@@ -10,7 +12,7 @@
 Precios de referencia 2026 (verificar al contratar): `stackcompare.net/ses-vs-resend-vs-postmark-vs-sendgrid-2026` (2026-03-31), `brevo.com/blog/amazon-ses-alternatives` (2026-05-20), `courier.com/integrations/compare/amazon-ses-vs-brevo` (2026-09). Regla: **streams separados** — transaccional (Resend/SES) nunca comparte IP/reputación con marketing (Brevo).
 
 ## Wiring Medusa (igual para los 3, solo cambia el provider)
-- `src/modules/<resend|ses|brevo>/service.ts` extiende `AbstractNotificationProviderService` (`send`), registrado en el Notification Module con `channels: ["email"]`. Guía oficial: `docs.medusajs.com/resources/integrations/guides/resend` + ejemplo `medusajs/examples/resend-integration` + plugin community `@tehaulp/medusa-plugin-resend` (v2.4+).
+- `src/modules/<resend|ses|brevo>/service.ts` extiende `AbstractNotificationProviderService` (`send`), registrado en el Notification Module con `channels: ["email"]`. Resend hoy = implementación propia (guía oficial 404; plugin community des-publicado 2026-08-08); SendGrid tiene provider first-party (`@medusajs/notification-sendgrid`).
 - Envío vía workflow: `sendNotificationsStep({to, channel:"email", template, data})` ejecutado en subscriber (`order.placed`, `auth.password_reset`…). Templates versionados en código (React Email en Resend).
 - Env vars en `/.env.example` (vacías, valores reales en `.env` gitignored).
 

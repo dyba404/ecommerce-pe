@@ -1,10 +1,10 @@
 # 01. Arquitectura madura
 
-## Monorepo (npm workspaces hoy, pnpm/Turborepo cuando crezca)
+## Monorepo (pnpm workspaces + Turborepo, activos desde 2026-09-23)
 
 ```
-apps/backend            Medusa v2 (create-medusa-app --starter dtc)
-apps/storefront         Next.js 16 App Router + Tailwind v4 + shadcn
+apps/backend            Medusa v2.21.1 (scaffold create-medusa-app; incl. @medusajs/caching y src/search/)
+apps/storefront         @dtc/storefront 1.0.3: Next.js 15.5 App Router + React 19 + Tailwind 3.4 (shadcn en T7)
 apps/workers/catalog-sync   FASE 2: BullMQ + Redis (scraping → Medusa API)
 apps/studio-video           FASE 2: HyperFrames (1 carpeta por campaña)
 packages/lib-jev            FASE 2: juicios tipados + políticas puras
@@ -18,6 +18,7 @@ openspec/  docs/  constitution.md  AGENTS.md
 - **Servicios "tontos"**: `CartService.createCart` solo crea cart. La composición (precios, promos, pagos) la hace el workflow. Esto permite vender ropa hoy y licencias mañana sin tocar cart.
 - **Admin**: React+Vite+TS sobre Admin APIs. Layout Composer drag&drop. Widgets para inyectar UI nativa (ej. cola moderación JEV, estado Culqi). Mismas APIs sirven para un admin custom si algún día hace falta (hoy prohibido duplicar).
 - **Worker modes**: HTTP y background separados en producción.
+- **Search first-party**: módulo `@medusajs/search` con `defineSearchIndex/graphSeed/graphConsume` (el scaffold ya trae `src/search/product.ts`); providers `search-postgres` (tsvector+pg_trgm) y `search-local` (Orama). Sin providers oficiales Meilisearch/Algolia (community: `@rokmohar/medusa-plugin-meilisearch`); el storefront consume vía `@medusajs/instantsearch-adapter` → `POST /store/search`.
 
 ## Patrones obligatorios en backend
 
@@ -35,4 +36,4 @@ openspec/  docs/  constitution.md  AGENTS.md
 ## Infra por fase
 
 - MVP: Postgres + Redis + Medusa + Storefront (VPS/Vercel+Railway/Neon según `09-roadmap`).
-- Fase 2: + BullMQ workers, S3/Cloudinary media, Meilisearch/Algolia search, Lambda/Cloud renders HyperFrames, JEV vía TypeSafe/OpenRouter/Vercel Gateway.
+- Fase 2: + BullMQ workers, S3/Cloudinary media, Lambda/Cloud renders HyperFrames, JEV vía TypeSafe/OpenRouter/Vercel Gateway. (Search ya quedó en MVP: first-party, ver arriba.)

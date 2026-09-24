@@ -19,8 +19,8 @@ ecommerce/
 │   ├── specs/<dominio>/spec.md      # verdad actual
 │   └── changes/mvp-ropa/{proposal.md,design.md,tasks.md,specs/}  # cambio en curso
 ├── apps/
-│   ├── backend/     # Medusa (se scaffoldea con create-medusa-app --starter dtc)
-│   ├── storefront/  # Next.js App Router + Tailwind v4 + shadcn
+│   ├── backend/     # Medusa 2.21.1 (scaffold create-medusa-app; ya copiado, commit 691aa45)
+│   ├── storefront/  # @dtc/storefront 1.0.3: Next 15.5 + React 19 + Tailwind 3.4 + instantsearch (shadcn en T7)
 │   ├── workers/catalog-sync/  # FASE 2: BullMQ + Firecrawl/ScrapeGraph/Crawl4AI
 │   └── studio-video/          # FASE 2: HyperFrames por campaña
 └── packages/lib-jev/          # FASE 2: juicios tipados (moderación, ruteo)
@@ -28,7 +28,7 @@ ecommerce/
 
 ## Estado
 
-Fase actual: **documentación + OpenSpec inicial**. `apps/*` y `packages/*` contienen fichas de scaffolding (qué va en cada app, comando oficial, spec que lo rige) — cero código falso, cero datos de ejemplo. El backend/storefront real se genera con los comandos de `docs/09-roadmap.md` (requiere Postgres + Redis).
+Fase actual: **Fase 1 (MVP ropa) en ejecución**. Fase 0 cerrada (docs 00..14 + OpenSpec). Hecho y commiteado: scaffold DTC en `apps/` (backend Medusa 2.21.1 + storefront Next 15.5/React 19/Tailwind 3.4 con búsqueda instantsearch), Docker Postgres+Redis healthy, migraciones+seed starter, `/health` 200, región PE (PEN + IGV 18% + envíos Lima/Provincias, script `setup-pe.ts`), producto TEST para E2E. Pendiente: seed real del dueño, búsqueda first-party, provider Culqi (Yape/PagoEfectivo), notificaciones, Libro de Reclamaciones, E2E. Detalle y secuencia: `docs/09-roadmap.md` + `openspec/changes/mvp-ropa/tasks.md`.
 
 ## Reglas duras
 

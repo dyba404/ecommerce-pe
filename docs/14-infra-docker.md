@@ -35,7 +35,8 @@ Traído de `projects/odontoflow` (repo SOLO LECTURA; patrón verificado en produ
 
 ## Receta T1: Postgres + Redis (compose del MVP)
 ```yaml
-# apps/backend/docker-compose.yml (se crea en T1 junto al scaffold; patrón healthchecks de odontoflow)
+# apps/backend/docker-compose.yml (YA existe en el repo desde T1, commit 691aa45; levantado y healthy 2026-09-23.
+# Comando: wsl.exe -e bash -lc "cd /mnt/c/Users/Administrator/Documents/projects/ecommerce/apps/backend && docker compose -p ecommerce up -d")
 services:
   db:
     image: postgres:16-alpine
