@@ -6,11 +6,13 @@
 import { MedusaContainer } from "@medusajs/framework";
 import {
   ContainerRegistrationKeys,
+  MedusaError,
   ModuleRegistrationName,
   Modules,
   ProductStatus,
 } from "@medusajs/framework/utils";
 import {
+  createInventoryLevelsWorkflow,
   createProductsWorkflow,
   createRegionsWorkflow,
   createShippingOptionsWorkflow,
@@ -33,7 +35,9 @@ export default async function setupPE({
     entity: "region",
     fields: ["id", "currency_code"],
   });
-  let peRegion = regionData.find((r) => r.currency_code === "pen");
+  let peRegion: { id: string; currency_code: string } | undefined = regionData.find(
+    (r) => r.currency_code === "pen"
+  );
 
   if (!peRegion) {
     logger.info("Creando región PE (PEN)...");
@@ -54,15 +58,57 @@ export default async function setupPE({
       input: [
         {
           country_code: "pe",
-          name: "Peru",
           provider_id: "tp_system",
-          rates: [{ name: "IGV", code: "IGV", rate: 18, is_default: true }],
         },
       ],
     });
-    logger.info("Región PE creada. Tax IGV 18%.");
+    logger.info("Región PE creada.");
   } else {
     logger.info("Región PE ya existe, saltando.");
+  }
+
+  const peRegionId = peRegion?.id;
+  if (!peRegionId) {
+    throw new MedusaError(
+      MedusaError.Types.UNEXPECTED_STATE,
+      "Región PE no disponible tras crear/buscar; no se pueden crear los envíos."
+    );
+  }
+
+  // --- T2: tax rate IGV 18% default (idempotente; el input anidado `rates` del
+  // workflow de tax regions NO lo crea — lección verificada) ---
+  const { data: taxRegionData } = await query.graph({
+    entity: "tax_region",
+    fields: ["id", "country_code"],
+  });
+  const peTaxRegion = taxRegionData.find((t) => t.country_code === "pe");
+  if (!peTaxRegion) {
+    throw new MedusaError(
+      MedusaError.Types.UNEXPECTED_STATE,
+      "Tax region PE no encontrada tras createTaxRegionsWorkflow."
+    );
+  }
+  const { data: taxRateData } = await query.graph({
+    entity: "tax_rate",
+    fields: ["id", "code", "tax_region.id"],
+  });
+  const igvExists = taxRateData.some(
+    (r) => r.tax_region?.id === peTaxRegion.id && r.code === "IGV"
+  );
+  if (!igvExists) {
+    const taxService = container.resolve(ModuleRegistrationName.TAX);
+    await taxService.createTaxRates([
+      {
+        tax_region_id: peTaxRegion.id,
+        name: "IGV",
+        code: "IGV",
+        rate: 18,
+        is_default: true,
+      },
+    ]);
+    logger.info("Tax rate IGV 18% default creado para PE.");
+  } else {
+    logger.info("Tax rate IGV ya existe, saltando.");
   }
 
   // --- T2: Stock location Lima enlazada a fulfillment manual + sales channel ---
@@ -147,7 +193,7 @@ export default async function setupPE({
           },
           prices: [
             { currency_code: "pen", amount: 1000 }, // S/10.00 en céntimos
-            { region_id: peRegion?.id, amount: 1000 },
+            { region_id: peRegionId, amount: 1000 },
           ],
           rules: [
             { attribute: "enabled_in_store", value: "true", operator: "eq" },
@@ -167,7 +213,7 @@ export default async function setupPE({
           },
           prices: [
             { currency_code: "pen", amount: 1500 }, // S/15.00 en céntimos
-            { region_id: peRegion?.id, amount: 1500 },
+            { region_id: peRegionId, amount: 1500 },
           ],
           rules: [
             { attribute: "enabled_in_store", value: "true", operator: "eq" },
@@ -253,6 +299,42 @@ export default async function setupPE({
     logger.info("Producto [TEST] Polo de prueba creado (S/49 PEN) — para E2E, no vender.");
   } else {
     logger.info("Producto TEST ya existe, saltando.");
+  }
+
+  // --- T3: inventario en Lima para items sin stock (el seed del starter solo
+  // cubrió SUS productos en el European Warehouse) ---
+  const { data: limaLoc } = await query.graph({
+    entity: "stock_location",
+    fields: ["id", "name"],
+  });
+  const limaIdFinal = limaLoc.find((l) => l.name === "Lima")?.id;
+  if (limaIdFinal) {
+    const { data: items } = await query.graph({
+      entity: "inventory_item",
+      fields: ["id"],
+    });
+    const { data: levels } = await query.graph({
+      entity: "inventory_level",
+      fields: ["inventory_item_id", "location_id"],
+    });
+    const enLima = new Set(
+      levels.filter((l) => l.location_id === limaIdFinal).map((l) => l.inventory_item_id)
+    );
+    const faltantes = items
+      .filter((i) => !enLima.has(i.id))
+      .map((i) => ({
+        location_id: limaIdFinal,
+        stocked_quantity: 1000,
+        inventory_item_id: i.id,
+      }));
+    if (faltantes.length) {
+      await createInventoryLevelsWorkflow(container).run({
+        input: { inventory_levels: faltantes },
+      });
+      logger.info(`Inventario creado en Lima para ${faltantes.length} items.`);
+    } else {
+      logger.info("Inventario en Lima ya cubierto, saltando.");
+    }
   }
 
   logger.info("Setup PE completado.");
