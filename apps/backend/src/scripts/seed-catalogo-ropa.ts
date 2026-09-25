@@ -36,6 +36,15 @@ const COLLECTIONS = ['Básicos', 'Denim', 'Casacas y Abrigos', 'Verano 2026']
 const CATEGORIES = ['Polos y Tops', 'Poleras y Chompas', 'Camisas', 'Pantalones', 'Vestidos y Faldas']
 const TAGS = ['algodon', 'lino', 'denim', 'basico', 'verano', 'invierno']
 
+/** Handles live in URLs: always ASCII (NFD + strip combining marks). */
+const slug = (text: string) =>
+  text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
 /** Medusa-hosted demo imagery (same CDN the starter uses), reused per garment type. */
 const IMG = {
   teeBlack: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
@@ -147,7 +156,12 @@ export default async function seedCatalogoRopa({ container }: ExecArgs) {
   )
   if (missingCollections.length) {
     await createCollectionsWorkflow(container).run({
-      input: { collections: missingCollections.map((title) => ({ title })) },
+      input: {
+        collections: missingCollections.map((title) => ({
+          title,
+          handle: slug(title),
+        })),
+      },
     })
     logger.info(`Created collections: ${missingCollections.join(', ')}`)
   }
@@ -205,14 +219,6 @@ export default async function seedCatalogoRopa({ container }: ExecArgs) {
     fields: ['id', 'handle'],
   })
   const takenHandles = new Set(existingProducts.map((p) => p.handle).filter(Boolean))
-
-  const slug = (text: string) =>
-    text
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
 
   const products = GARMENTS.map((garment, index) => {
     const handle = `${HANDLE_PREFIX}-${String(index + 1).padStart(2, '0')}-${slug(garment.title)}`
