@@ -32,3 +32,6 @@ apps/studio-video/**/capture/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Evidencia visual de verificación (screenshots) vive en disco, no en git
+openspec/changes/*/evidence/

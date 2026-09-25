@@ -56,8 +56,8 @@ const SearchPanel = ({ onNavigate }: { onNavigate: () => void }) => {
             setInputValue(event.target.value)
             refine(event.target.value)
           }}
-          placeholder="Search products"
-          aria-label="Search products"
+          placeholder="Buscar productos"
+          aria-label="Buscar productos"
           autoFocus
           className="txt-medium w-full bg-transparent py-4 text-ui-fg-base outline-none placeholder:text-ui-fg-muted"
           data-testid="search-input"
@@ -121,7 +121,7 @@ const Search = () => {
       <button
         type="button"
         onClick={open}
-        aria-label="Search products"
+        aria-label="Buscar productos"
         className="flex items-center hover:text-ui-fg-base"
         data-testid="nav-search-button"
       >

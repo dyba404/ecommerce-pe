@@ -10,14 +10,17 @@ import { Fragment } from "react"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
 import { Locale } from "@lib/data/locales"
+import { getStoreName } from "@lib/util/site"
 
 
-const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Account: "/account",
-  Cart: "/cart",
-}
+// slug fijo por item: el testid no depende del texto visible en español
+const SideMenuItems: { name: string; href: string; slug: string }[] = [
+  { name: "Inicio", href: "/", slug: "inicio" },
+  { name: "Tienda", href: "/store", slug: "store" },
+  { name: "Cuenta", href: "/account", slug: "account" },
+  { name: "Carrito", href: "/cart", slug: "cart" },
+  { name: "Libro de Reclamaciones", href: "/libro-reclamaciones", slug: "libro-reclamaciones" },
+]
 
 type SideMenuProps = {
   regions: HttpTypes.StoreRegion[] | null
@@ -40,7 +43,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                   data-testid="nav-menu-button"
                   className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
                 >
-                  Menu
+                  Menú
                 </Popover.Button>
               </div>
 
@@ -73,14 +76,14 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                       </button>
                     </div>
                     <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
+                      {SideMenuItems.map(({ name, href, slug }) => {
                         return (
-                          <li key={name}>
+                          <li key={slug}>
                             <LocalizedClientLink
                               href={href}
                               className="text-3xl leading-10 hover:text-ui-fg-disabled"
                               onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
+                              data-testid={`side-menu-${slug}-link`}
                             >
                               {name}
                             </LocalizedClientLink>
@@ -127,8 +130,8 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                         />
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
-                        reserved.
+                        © {new Date().getFullYear()} {getStoreName()}. Todos
+                        los derechos reservados.
                       </Text>
                     </div>
                   </div>

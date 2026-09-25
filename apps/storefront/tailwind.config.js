@@ -33,6 +33,26 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        // Acento único del sitio (esmeralda profundo). Todo lo interactivo lo
+        // usa vía ui-fg-interactive; no introducir otros acentos (lock de color).
+        accent: {
+          50: "#ECFDF5",
+          100: "#D1FAE5",
+          200: "#A7F3D0",
+          300: "#6EE7B7",
+          400: "#34D399",
+          500: "#10B981",
+          600: "#059669",
+          700: "#047857",
+          800: "#065F46",
+          900: "#064E3B",
+        },
+        // Tokens semánticos del preset Medusa re-tematizados al acento.
+        "ui-fg-interactive": "#047857",
+        "ui-fg-interactive-hover": "#065F46",
+        "ui-border-interactive": "#047857",
+        "ui-bg-interactive": "#047857",
+        "ui-bg-interactive-hover": "#065F46",
       },
       borderRadius: {
         none: "0px",
@@ -59,7 +79,7 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          "Inter",
+          "var(--font-manrope)",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -67,6 +87,13 @@ module.exports = {
           "Helvetica Neue",
           "Ubuntu",
           "sans-serif",
+        ],
+        display: [
+          "var(--font-cormorant)",
+          "Georgia",
+          "Cambria",
+          "Times New Roman",
+          "serif",
         ],
       },
       keyframes: {

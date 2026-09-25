@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { listLocales } from "@lib/data/locales"
 import { getLocale } from "@lib/data/locale-actions"
 import { listRegions } from "@lib/data/regions"
+import { getStoreName } from "@lib/util/site"
 import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
@@ -29,10 +30,10 @@ export default async function Nav() {
           <div className="flex items-center h-full">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
+              className="font-display text-xl small:text-2xl tracking-tight text-ui-fg-base hover:text-ui-fg-interactive"
               data-testid="nav-store-link"
             >
-              Medusa Store
+              {getStoreName()}
             </LocalizedClientLink>
           </div>
 
@@ -44,7 +45,7 @@ export default async function Nav() {
                 href="/account"
                 data-testid="nav-account-link"
               >
-                Account
+                Cuenta
               </LocalizedClientLink>
             </div>
             <Suspense
@@ -54,7 +55,7 @@ export default async function Nav() {
                   href="/cart"
                   data-testid="nav-cart-link"
                 >
-                  Cart (0)
+                  Carrito (0)
                 </LocalizedClientLink>
               }
             >
