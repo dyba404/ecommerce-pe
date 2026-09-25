@@ -19,7 +19,16 @@ import {
   createStockLocationsWorkflow,
   createTaxRegionsWorkflow,
   linkSalesChannelsToStockLocationWorkflow,
+  updateProductVariantsWorkflow,
+  updateShippingOptionsWorkflow,
 } from "@medusajs/medusa/core-flows";
+
+// Montos en UNIDADES MAYORES (10 = S/10.00): Medusa v2 guarda `amount` como
+// el valor en la unidad estándar de la moneda (ver seed oficial del starter,
+// amount: 10 = S/10). El provider de pagos convierte a céntimos en su frontera
+// (getSmallestUnit). Bug corregido 2026-09-24: la primera versión sembró
+// céntimos (1000/1500/4900) y los precios salían 100× inflados. Las secciones
+// de envíos y producto TEST corrigen datos existentes además de crear.
 
 export default async function setupPE({
   container,
@@ -147,12 +156,27 @@ export default async function setupPE({
     logger.info("Stock location Lima ya existe, saltando.");
   }
 
-  // --- T2: fulfillment set PE + envíos Lima (S/10) y Provincias (S/15), céntimos ---
+  // --- T2: fulfillment set PE + envíos Lima (S/10) y Provincias (S/15) ---
+  const ENVIOS = [
+    {
+      name: "Envío Lima",
+      amount: 10, // S/10.00
+      type: { label: "Lima", description: "Entrega en Lima en 1-2 días hábiles.", code: "lima" },
+    },
+    {
+      name: "Envío Provincias",
+      amount: 15, // S/15.00
+      type: { label: "Provincias", description: "Envío a provincias en 3-5 días hábiles.", code: "provincias" },
+    },
+  ];
   const { data: optData } = await query.graph({
     entity: "shipping_option",
     fields: ["id", "name"],
   });
-  if (!optData.some((o) => o.name === "Envío Lima")) {
+  const enviosFaltantes = ENVIOS.filter(
+    (e) => !optData.some((o) => o.name === e.name)
+  );
+  if (enviosFaltantes.length) {
     const fulfillmentModuleService = container.resolve(
       ModuleRegistrationName.FULFILLMENT
     );
@@ -179,52 +203,45 @@ export default async function setupPE({
     });
     const shippingProfile = profileData[0];
     await createShippingOptionsWorkflow(container).run({
-      input: [
-        {
-          name: "Envío Lima",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: fulfillmentSet.service_zones[0].id,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Lima",
-            description: "Entrega en Lima en 1-2 días hábiles.",
-            code: "lima",
-          },
-          prices: [
-            { currency_code: "pen", amount: 1000 }, // S/10.00 en céntimos
-            { region_id: peRegionId, amount: 1000 },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-        {
-          name: "Envío Provincias",
-          price_type: "flat",
-          provider_id: "manual_manual",
-          service_zone_id: fulfillmentSet.service_zones[0].id,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Provincias",
-            description: "Envío a provincias en 3-5 días hábiles.",
-            code: "provincias",
-          },
-          prices: [
-            { currency_code: "pen", amount: 1500 }, // S/15.00 en céntimos
-            { region_id: peRegionId, amount: 1500 },
-          ],
-          rules: [
-            { attribute: "enabled_in_store", value: "true", operator: "eq" },
-            { attribute: "is_return", value: "false", operator: "eq" },
-          ],
-        },
-      ],
+      input: enviosFaltantes.map((e) => ({
+        name: e.name,
+        price_type: "flat" as const,
+        provider_id: "manual_manual",
+        service_zone_id: fulfillmentSet.service_zones[0].id,
+        shipping_profile_id: shippingProfile.id,
+        type: e.type,
+        prices: [
+          { currency_code: "pen", amount: e.amount },
+          { region_id: peRegionId, amount: e.amount },
+        ],
+        rules: [
+          { attribute: "enabled_in_store", value: "true", operator: "eq" },
+          { attribute: "is_return", value: "false", operator: "eq" },
+        ],
+      })),
     });
     logger.info("Envíos Lima (S/10) y Provincias (S/15) creados — editables en Admin.");
-  } else {
-    logger.info("Envíos PE ya existen, saltando.");
+  }
+
+  // Corrección de escala en datos ya sembrados: el update reemplaza TODOS los
+  // precios flat (los sin id se recrean, los sobrantes se eliminan).
+  const enviosExistentes = optData.filter((o) =>
+    ENVIOS.some((e) => e.name === o.name)
+  );
+  if (enviosExistentes.length) {
+    await updateShippingOptionsWorkflow(container).run({
+      input: enviosExistentes.map((o) => {
+        const def = ENVIOS.find((e) => e.name === o.name)!;
+        return {
+          id: o.id,
+          prices: [
+            { currency_code: "pen", amount: def.amount },
+            { region_id: peRegionId, amount: def.amount },
+          ],
+        };
+      }),
+    });
+    logger.info("Precios de envíos PE fijados en unidades mayores (S/10 y S/15).");
   }
 
   // --- T3 parcial: producto de PRUEBA etiquetado TEST para el E2E (no vender) ---
@@ -276,19 +293,19 @@ export default async function setupPE({
                 title: "S / Black",
                 sku: "TEST-POLO-S-BLACK",
                 options: { Size: "S", Color: "Black" },
-                prices: [{ amount: 4900, currency_code: "pen" }], // S/49.00
+                prices: [{ amount: 49, currency_code: "pen" }], // S/49.00
               },
               {
                 title: "M / Black",
                 sku: "TEST-POLO-M-BLACK",
                 options: { Size: "M", Color: "Black" },
-                prices: [{ amount: 4900, currency_code: "pen" }],
+                prices: [{ amount: 49, currency_code: "pen" }],
               },
               {
                 title: "L / Black",
                 sku: "TEST-POLO-L-BLACK",
                 options: { Size: "L", Color: "Black" },
-                prices: [{ amount: 4900, currency_code: "pen" }],
+                prices: [{ amount: 49, currency_code: "pen" }],
               },
             ],
             sales_channels: [{ id: defaultChannel.id }],
@@ -298,7 +315,28 @@ export default async function setupPE({
     });
     logger.info("Producto [TEST] Polo de prueba creado (S/49 PEN) — para E2E, no vender.");
   } else {
-    logger.info("Producto TEST ya existe, saltando.");
+    // Corrección de escala en variantes ya sembradas (céntimos → unidades mayores).
+    const { data: testPoloData } = await query.graph({
+      entity: "product",
+      fields: ["id", "variants.id"],
+      filters: { handle: "test-polo" },
+    });
+    const variantIds = ((testPoloData[0]?.variants ?? []) as { id: string }[]).map(
+      (v) => v.id
+    );
+    if (variantIds.length) {
+      await updateProductVariantsWorkflow(container).run({
+        input: {
+          product_variants: variantIds.map((id) => ({
+            id,
+            prices: [{ amount: 49, currency_code: "pen" }],
+          })),
+        },
+      });
+      logger.info("Precios del producto TEST fijados en S/49.00.");
+    } else {
+      logger.info("Producto TEST sin variantes que corregir.");
+    }
   }
 
   // --- T3: inventario en Lima para items sin stock (el seed del starter solo
