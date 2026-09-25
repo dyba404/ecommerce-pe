@@ -51,6 +51,12 @@ module.exports = defineConfig({
       },
     },
     {
+      // Libro de Reclamaciones virtual (Ley 29571, REQ-LIB-01/02/03).
+      // Tabla propia (complaint), ruta pública POST /store/libro-reclamaciones
+      // con Zod en el borde; acuse vía provider Resend del notification module.
+      resolve: "./src/modules/libro-reclamaciones",
+    },
+    {
       // Search module con provider Postgres nativo (engine pg_trgm/tsvector,
       // funciona en el Postgres 16 de Docker — docs/09, T5b). El loader
       // first-party descubre los índices de src/search/ y el seed corre solo

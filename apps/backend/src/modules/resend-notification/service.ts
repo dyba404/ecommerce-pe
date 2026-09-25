@@ -19,9 +19,14 @@ import {
   orderPlacedEmail,
   OrderPlacedTemplateData,
 } from "./emails/order-placed"
+import {
+  libroAcuseEmail,
+  LibroAcuseTemplateData,
+} from "./emails/libro-acuse"
 
 enum Templates {
   ORDER_PLACED = "order-placed",
+  LIBRO_ACUSE = "libro-acuse",
 }
 
 const templates: Record<
@@ -30,6 +35,8 @@ const templates: Record<
 > = {
   [Templates.ORDER_PLACED]: (data) =>
     orderPlacedEmail(data as OrderPlacedTemplateData),
+  [Templates.LIBRO_ACUSE]: (data) =>
+    libroAcuseEmail(data as LibroAcuseTemplateData),
 }
 
 type ResendOptions = {

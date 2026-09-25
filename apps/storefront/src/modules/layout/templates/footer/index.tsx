@@ -143,6 +143,22 @@ export default async function Footer() {
                 </li>
               </ul>
             </div>
+            <div className="flex flex-col gap-y-2">
+              <span className="txt-small-plus txt-ui-fg-base">Legal</span>
+              <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
+                <li>
+                  {/* Obligatorio en Perú: Ley N.° 29571 — enlace visible en 1
+                      tap desde cualquier página (REQ-LIB-01). */}
+                  <LocalizedClientLink
+                    className="hover:text-ui-fg-base"
+                    href="/libro-reclamaciones"
+                    data-testid="libro-reclamaciones-link"
+                  >
+                    Libro de Reclamaciones
+                  </LocalizedClientLink>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
