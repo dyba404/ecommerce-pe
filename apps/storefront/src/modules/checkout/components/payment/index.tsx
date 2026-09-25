@@ -1,9 +1,10 @@
 "use client"
 import { RadioGroup } from "@headlessui/react"
-import { isStripeLike, paymentInfoMap } from "@lib/constants"
+import { isCulqi, isStripeLike, paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import ErrorMessage from "@modules/checkout/components/error-message"
+import CulqiPaymentContainer from "@modules/checkout/components/culqi-payment"
 import PaymentContainer, {
   StripePaymentContainer,
 } from "@modules/checkout/components/payment-container"
@@ -30,6 +31,15 @@ const Payment = ({
     (paymentSession) => paymentSession.status === "pending"
   )
 
+  // Sin publishable key de Stripe el Element no puede montar (skeleton
+  // infinito): se oculta la opción hasta configurar NEXT_PUBLIC_STRIPE_KEY.
+  const stripeKeyMissing =
+    !process.env.NEXT_PUBLIC_STRIPE_KEY &&
+    !process.env.NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY
+  const visiblePaymentMethods = availablePaymentMethods.filter(
+    (method) => !(stripeKeyMissing && isStripeLike(method.id))
+  )
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [paymentComplete, setPaymentComplete] = useState(false)
@@ -46,7 +56,9 @@ const Payment = ({
   const setPaymentMethod = async (method: string) => {
     setError(null)
     setSelectedPaymentMethod(method)
-    if (isStripeLike(method)) {
+    if (isStripeLike(method) || isCulqi(method)) {
+      // Sin data: si la session ya existía con source_id (Culqi), queda limpia
+      // y el usuario vuelve a tokenizar (tokens tkn_/ype_ de vida corta).
       await initiatePaymentSession(cart, {
         provider_id: method,
       })
@@ -140,16 +152,25 @@ const Payment = ({
       </div>
       <div>
         <div className={isOpen ? "block" : "hidden"}>
-          {!paidByGiftcard && availablePaymentMethods?.length && (
+          {!paidByGiftcard && visiblePaymentMethods?.length ? (
             <>
               <RadioGroup
                 value={selectedPaymentMethod}
                 onChange={(value: string) => setPaymentMethod(value)}
               >
-                {availablePaymentMethods.map((paymentMethod) => (
+                {visiblePaymentMethods.map((paymentMethod) => (
                   <div key={paymentMethod.id}>
                     {isStripeLike(paymentMethod.id) ? (
                       <StripePaymentContainer
+                        paymentProviderId={paymentMethod.id}
+                        selectedPaymentOptionId={selectedPaymentMethod}
+                        paymentInfoMap={paymentInfoMap}
+                        setError={setError}
+                        setPaymentComplete={setPaymentComplete}
+                      />
+                    ) : isCulqi(paymentMethod.id) ? (
+                      <CulqiPaymentContainer
+                        cart={cart}
                         paymentProviderId={paymentMethod.id}
                         selectedPaymentOptionId={selectedPaymentMethod}
                         paymentInfoMap={paymentInfoMap}
@@ -167,7 +188,7 @@ const Payment = ({
                 ))}
               </RadioGroup>
             </>
-          )}
+          ) : null}
 
           {paidByGiftcard && (
             <div className="flex flex-col w-1/3">
@@ -194,7 +215,9 @@ const Payment = ({
             onClick={handleSubmit}
             isLoading={isLoading}
             disabled={
-              (isStripeLike(selectedPaymentMethod) && !paymentComplete) ||
+              ((isStripeLike(selectedPaymentMethod) ||
+                isCulqi(selectedPaymentMethod)) &&
+                !paymentComplete) ||
               (!selectedPaymentMethod && !paidByGiftcard)
             }
             data-testid="submit-payment-button"

@@ -1,6 +1,6 @@
 "use client"
 
-import { isManual, isStripeLike } from "@lib/constants"
+import { isCulqi, isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@modules/common/components/ui"
@@ -25,7 +25,9 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     !cart.email ||
     (cart.shipping_methods?.length ?? 0) < 1
 
-  const paymentSession = cart.payment_collection?.payment_sessions?.[0]
+  const paymentSession = cart.payment_collection?.payment_sessions?.find(
+    (s) => s.status === "pending"
+  )
 
   switch (true) {
     case isStripeLike(paymentSession?.provider_id):
@@ -35,6 +37,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           cart={cart}
           data-testid={dataTestId}
         />
+      )
+    case isCulqi(paymentSession?.provider_id):
+      // El token (tkn_/ype_) ya quedó persistido en la data de la session al
+      // tokenizar en el paso de pago; aquí solo se completa el cart → el
+      // provider crea el charge en authorizePayment. Si el token expiró
+      // (yape: 2 min), el error de Culqi se muestra y se re-tokeniza.
+      return (
+        <CulqiCompletePaymentButton notReady={notReady} data-testid={dataTestId} />
       )
     case isManual(paymentSession?.provider_id):
       return (
@@ -151,6 +161,48 @@ const StripePaymentButton = ({
       <ErrorMessage
         error={errorMessage}
         data-testid="stripe-payment-error-message"
+      />
+    </>
+  )
+}
+
+const CulqiCompletePaymentButton = ({
+  notReady,
+  "data-testid": dataTestId,
+}: {
+  notReady: boolean
+  "data-testid"?: string
+}) => {
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const handlePayment = async () => {
+    setSubmitting(true)
+    setErrorMessage(null)
+
+    await placeOrder()
+      .catch((err) => {
+        setErrorMessage(err.message)
+      })
+      .finally(() => {
+        setSubmitting(false)
+      })
+  }
+
+  return (
+    <>
+      <Button
+        disabled={notReady}
+        isLoading={submitting}
+        onClick={handlePayment}
+        size="large"
+        data-testid={dataTestId}
+      >
+        Place order
+      </Button>
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="culqi-payment-error-message"
       />
     </>
   )
