@@ -73,11 +73,13 @@ const MobileActions: React.FC<MobileActionsProps> = ({
             className="bg-white flex flex-col gap-y-3 justify-center items-center text-large-regular p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] h-full w-full border-t border-gray-200"
             data-testid="mobile-actions"
           >
-            <div className="flex items-center gap-x-2">
-              <span data-testid="mobile-title">{product.title}</span>
-              <span>—</span>
+            <div className="flex items-center gap-x-2 w-full">
+              <span data-testid="mobile-title" className="truncate min-w-0">
+                {product.title}
+              </span>
+              <span className="shrink-0">—</span>
               {selectedPrice ? (
-                <div className="flex items-end gap-x-2 text-ui-fg-base">
+                <div className="flex items-end gap-x-2 text-ui-fg-base shrink-0 whitespace-nowrap">
                   {selectedPrice.price_type === "sale" && (
                     <p>
                       <span className="line-through text-small-regular">
@@ -104,11 +106,11 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               {!isSimple && <Button
                 onClick={open}
                 variant="secondary"
-                className="w-full"
+                className="w-full whitespace-nowrap px-2"
                 data-testid="mobile-actions-button"
               >
-                <div className="flex items-center justify-between w-full">
-                  <span>
+                <div className="flex items-center justify-between w-full min-w-0">
+                  <span className="truncate text-sm">
                     {variant
                       ? Object.values(options).join(" / ")
                       : "Elige opciones"}
@@ -119,7 +121,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               <Button
                 onClick={handleAddToCart}
                 disabled={!inStock || !variant}
-                className="w-full"
+                className="w-full whitespace-nowrap px-2 text-sm"
                 isLoading={isAdding}
                 data-testid="mobile-cart-button"
               >

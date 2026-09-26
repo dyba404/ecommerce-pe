@@ -17,18 +17,19 @@ const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
         <Heading className="text-[2rem] leading-[2.75rem]">Carrito</Heading>
       </div>
       {/* La tabla del starter desborda a 360px (min-width de sus columnas);
-          wrapper scrollable + thumbnail más angosta en móvil lo contienen. */}
-      <div className="overflow-x-auto">
+          table-fixed + paddings reducidos en móvil la hacen respetar el ancho
+          del contenedor (el título que quebrado, nada empuja). */}
+      <div className="overflow-x-auto [&_table]:!table-fixed [&_table]:!w-full [&_td]:!px-2 [&_th]:!px-2 small:[&_td]:!px-4 small:[&_th]:!px-4">
         <Table>
           <Table.Header className="border-t-0">
             <Table.Row className="text-ui-fg-subtle txt-medium-plus">
-              <Table.HeaderCell className="!pl-0">Producto</Table.HeaderCell>
+              <Table.HeaderCell className="!pl-0 w-14 small:w-auto">Producto</Table.HeaderCell>
               <Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell>Cant.</Table.HeaderCell>
+              <Table.HeaderCell className="w-[84px] small:w-auto">Cant.</Table.HeaderCell>
               <Table.HeaderCell className="hidden small:table-cell">
                 Precio
               </Table.HeaderCell>
-              <Table.HeaderCell className="!pr-0 text-right">
+              <Table.HeaderCell className="!pr-0 text-right w-[76px] small:w-auto">
                 Total
               </Table.HeaderCell>
             </Table.Row>
