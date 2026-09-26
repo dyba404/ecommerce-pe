@@ -1,7 +1,8 @@
 "use client"
 
 import type { SearchClient } from "instantsearch.js"
-import { Configure, InstantSearch } from "react-instantsearch"
+import { Configure } from "react-instantsearch"
+import { InstantSearchNext } from "react-instantsearch-nextjs"
 
 import { PRODUCT_INDEX_NAME, searchClient } from "@lib/search-client"
 import StoreHits from "@modules/store/components/store-hits"
@@ -24,7 +25,10 @@ const StoreTemplate = ({
       </div>
 
       <div className="flex flex-col small:flex-row small:items-start">
-        <InstantSearch
+        {/* SSR + hidratación del estado de búsqueda via react-instantsearch-nextjs:
+            sin esto el árbol entero de la búsqueda monta en el cliente (causa
+            raíz del CLS 1.202 de esta página). Mismo contrato que InstantSearch. */}
+        <InstantSearchNext
           indexName={PRODUCT_INDEX_NAME}
           searchClient={searchClient as unknown as SearchClient}
           routing
@@ -40,7 +44,7 @@ const StoreTemplate = ({
               productCount={productCount}
             />
           </div>
-        </InstantSearch>
+        </InstantSearchNext>
       </div>
     </div>
   )
