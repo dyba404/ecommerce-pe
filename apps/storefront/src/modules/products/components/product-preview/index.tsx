@@ -60,11 +60,16 @@ export default async function ProductPreview({
             </span>
           )}
         </div>
-        <div className="flex txt-compact-medium mt-4 justify-between gap-x-3">
-          <Text className="text-ui-fg-base min-w-0" data-testid="product-title">
+        {/* Título arriba, precio debajo (patrón de la referencia): nada de
+            pelear horizontalmente; line-clamp-2 uniforma la altura de tarjeta. */}
+        <div className="flex flex-col gap-y-1 mt-4">
+          <Text
+            className="text-ui-fg-base line-clamp-2 leading-snug"
+            data-testid="product-title"
+          >
             {product.title}
           </Text>
-          <div className="flex items-center gap-x-2 shrink-0 whitespace-nowrap text-right">
+          <div className="flex items-baseline gap-x-2">
             {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
           </div>
         </div>

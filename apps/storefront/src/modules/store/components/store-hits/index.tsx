@@ -98,14 +98,18 @@ const StoreHits = ({ hitsPerPage, currencyCode, productCount }: StoreHitsProps) 
                       size="full"
                       title={hit.title}
                     />
-                    <div className="flex txt-compact-medium mt-4 justify-between">
+                    {/* Título arriba, precio debajo — misma tarjeta que en
+                        rails/colecciones (simetría en todo el shop). */}
+                    <div className="flex flex-col gap-y-1 mt-4">
                       <Text
-                        className="text-ui-fg-subtle"
+                        className="text-ui-fg-base line-clamp-2 leading-snug"
                         data-testid="product-title"
                       >
                         {hit.title}
                       </Text>
-                      <HitPrice hit={hit} currencyCode={currencyCode} />
+                      <div className="flex items-baseline gap-x-2">
+                        <HitPrice hit={hit} currencyCode={currencyCode} />
+                      </div>
                     </div>
                   </div>
                 </LocalizedClientLink>
