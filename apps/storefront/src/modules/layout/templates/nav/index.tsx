@@ -1,5 +1,7 @@
 import { Suspense } from "react"
 
+import { ShoppingBag } from "lucide-react"
+
 import { listLocales } from "@lib/data/locales"
 import { getLocale } from "@lib/data/locale-actions"
 import { listRegions } from "@lib/data/regions"
@@ -51,11 +53,15 @@ export default async function Nav() {
             <Suspense
               fallback={
                 <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex items-center gap-2 py-3"
+                  className="relative w-11 h-11 rounded-full border border-ui-border-base bg-white flex items-center justify-center text-ui-fg-base transition-colors duration-200 hover:text-ui-fg-interactive small:w-auto small:h-auto small:border-0 small:bg-transparent small:py-3 small:hover:text-ui-fg-base"
                   href="/cart"
                   data-testid="nav-cart-link"
                 >
-                  Carrito (0)
+                  <ShoppingBag
+                    className="h-5 w-5 small:hidden"
+                    aria-hidden="true"
+                  />
+                  <span className="hidden small:inline">Carrito (0)</span>
                 </LocalizedClientLink>
               }
             >

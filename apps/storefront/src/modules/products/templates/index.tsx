@@ -61,8 +61,10 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           </Suspense>
         </div>
       </div>
+      {/* mb-40 en móvil: deja libre la barra flotante de acciones del PDP
+          (~116px de alto efectivo, lg:hidden). */}
       <div
-        className="content-container my-16 small:my-32"
+        className="content-container mt-16 mb-40 small:my-32"
         data-testid="related-products-container"
       >
         <Suspense fallback={<SkeletonRelatedProducts />}>

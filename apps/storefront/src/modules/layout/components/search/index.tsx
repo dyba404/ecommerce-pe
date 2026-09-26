@@ -1,6 +1,7 @@
 "use client"
 
 import { MagnifyingGlass } from "@medusajs/icons"
+import { Search as SearchIcon } from "lucide-react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { SearchClient } from "instantsearch.js"
 import {
@@ -122,10 +123,10 @@ const Search = () => {
         type="button"
         onClick={open}
         aria-label="Buscar productos"
-        className="flex items-center hover:text-ui-fg-base"
+        className="flex items-center justify-center w-11 h-11 rounded-full border border-ui-border-base bg-white text-ui-fg-base transition-colors duration-200 hover:text-ui-fg-interactive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ui-fg-interactive small:w-auto small:h-auto small:border-0 small:bg-transparent small:hover:text-ui-fg-base"
         data-testid="nav-search-button"
       >
-        <MagnifyingGlass />
+        <SearchIcon className="h-5 w-5" aria-hidden="true" />
       </button>
 
       <SearchDrawer isOpen={isOpen} close={close}>
