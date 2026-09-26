@@ -2,6 +2,11 @@ const path = require("path")
 
 module.exports = {
   darkMode: "class",
+  // Sticky hover en touch: sin este flag, todo `hover:` aplica al primer tap y
+  // queda pegado hasta tocar afuera (comportamiento de "página web en el celular").
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   presets: [require("@medusajs/ui-preset")],
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx}",

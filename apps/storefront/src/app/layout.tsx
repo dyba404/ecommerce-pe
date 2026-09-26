@@ -1,6 +1,6 @@
 import { getBaseURL } from "@lib/util/env"
 import { getStoreName } from "@lib/util/site"
-import { Metadata } from "next"
+import { Metadata, Viewport } from "next"
 import { Cormorant_Garamond, Manrope } from "next/font/google"
 import "styles/globals.css"
 
@@ -29,6 +29,16 @@ export const metadata: Metadata = {
   },
   description:
     "Ropa esencial en soles, con envío a todo el Perú. Paga con tarjeta o Yape.",
+}
+
+// Mobile-native: viewport-fit=cover + safe-area env() en nav/barras fijas
+// (contenido edge-to-edge en teléfonos con muesca); theme-color = bg del
+// header (blanco) para que el chrome del navegador no pelee con la página.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#ffffff",
 }
 
 export default function RootLayout(props: { children: React.ReactNode }) {

@@ -12,6 +12,50 @@
   }
 }
 
+/* ==========================================================================
+   Mobile-native baseline (reglas de plataforma; no reproducen en emulación)
+   - tap-highlight transparente: el flash gris/azul del tap es la señal #1 de
+     "web en el celular"; el feedback de presión lo da el :active de abajo.
+   - text-size-adjust 100: sin inflación de fuente al rotar.
+   - inputs ≥16px en touch: iOS hace zoom de página al enfocar <16px y no
+     vuelve; el fix es el tamaño, NO deshabilitar zoom (regla de a11y).
+   - touch-action manipulation: mata el delay de 300ms por double-tap.
+   - user-select none SOLO en controles: el texto de contenido sigue
+     seleccionable (direcciones, códigos de orden).
+   - :active scale: feedback de presión al instante del touch (los controles
+     nativos responden al posar el dedo, no al soltar).
+   ========================================================================== */
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+}
+
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+button,
+[role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active {
+  transform: scale(0.97);
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
