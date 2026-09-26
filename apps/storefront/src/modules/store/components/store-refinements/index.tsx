@@ -20,7 +20,7 @@ const SortProducts = ({ currencyCode }: { currencyCode: string }) => {
 
   return (
     <FilterRadioGroup
-      title="Sort by"
+      title="Ordenar por"
       items={items}
       value={currentRefinement}
       handleChange={refine}
@@ -32,6 +32,9 @@ const SortProducts = ({ currencyCode }: { currencyCode: string }) => {
 const StoreRefinements = ({ currencyCode }: { currencyCode: string }) => {
   return (
     <div className="flex flex-col gap-12 py-4 mb-8 small:px-0 pl-6 small:w-[250px] small:shrink-0 small:ml-[1.675rem]">
+      {/* h2 sr-only: los grupos de filtros usan h3 (Radix Accordion.Header); sin
+          este intermedio el orden de encabezados salta h1→h3 (WCAG 1.3.1). */}
+      <h2 className="sr-only">Filtros</h2>
       <SortProducts currencyCode={currencyCode} />
       <CurrentRefinements currencyCode={currencyCode} />
       <OptionRefinements />

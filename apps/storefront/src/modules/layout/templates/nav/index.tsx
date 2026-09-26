@@ -41,7 +41,7 @@ export default async function Nav() {
             <Search />
             <div className="hidden small:flex items-center gap-x-6 h-full">
               <LocalizedClientLink
-                className="hover:text-ui-fg-base"
+                className="hover:text-ui-fg-base py-3"
                 href="/account"
                 data-testid="nav-account-link"
               >
@@ -51,7 +51,7 @@ export default async function Nav() {
             <Suspense
               fallback={
                 <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
+                  className="hover:text-ui-fg-base flex items-center gap-2 py-3"
                   href="/cart"
                   data-testid="nav-cart-link"
                 >

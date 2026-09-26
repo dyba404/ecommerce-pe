@@ -10,6 +10,7 @@ type ThumbnailProps = {
   size?: "small" | "medium" | "large" | "full" | "square"
   isFeatured?: boolean
   className?: string
+  title?: string | null
   "data-testid"?: string
 }
 
@@ -19,6 +20,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   size = "small",
   isFeatured,
   className,
+  title,
   "data-testid": dataTestid,
 }) => {
   const initialImage = thumbnail || images?.[0]?.url
@@ -40,7 +42,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
+      <ImageOrPlaceholder image={initialImage} size={size} title={title} />
     </Container>
   )
 }
@@ -48,11 +50,12 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
 const ImageOrPlaceholder = ({
   image,
   size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
+  title,
+}: Pick<ThumbnailProps, "size" | "title"> & { image?: string }) => {
   return image ? (
     <Image
       src={image}
-      alt="Thumbnail"
+      alt={title || "Producto de la tienda"}
       className="absolute inset-0 object-cover object-center transition-transform duration-300 ease-out group-hover:scale-[1.03]"
       draggable={false}
       quality={50}

@@ -82,7 +82,7 @@ const CartDropdown = ({
       <Popover className="relative h-full">
         <PopoverButton className="h-full">
           <LocalizedClientLink
-            className="hover:text-ui-fg-base"
+            className="hover:text-ui-fg-base flex items-center h-full px-2 -mx-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ui-fg-interactive"
             href="/cart"
             data-testid="nav-cart-link"
           >{`Carrito (${totalItems})`}</LocalizedClientLink>
@@ -128,6 +128,7 @@ const CartDropdown = ({
                             thumbnail={item.thumbnail}
                             images={item.variant?.product?.images}
                             size="square"
+                            title={item.product_title}
                           />
                         </LocalizedClientLink>
                         <div className="flex flex-col justify-between flex-1">

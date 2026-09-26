@@ -23,9 +23,12 @@ type ProductHit = Hit<
 type StoreHitsProps = {
   hitsPerPage: number
   currencyCode: string
+  // Total real de productos sin filtrar (server-side): el skeleton inicial
+  // replica esa altura exacta para que la hidratación no empuje el footer (CLS).
+  productCount?: number
 }
 
-const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
+const StoreHits = ({ hitsPerPage, currencyCode, productCount }: StoreHitsProps) => {
   const { items } = useHits<ProductHit>()
   const { status, error, indexUiState } = useInstantSearch()
   const { isSearching, hasNoResultsYet } = useSearchSettled()
@@ -54,7 +57,7 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
         className="py-16 text-center text-ui-fg-error"
         data-testid="products-error"
       >
-        Couldn&apos;t load products
+        No se pudieron cargar los productos
         {error?.message ? `: ${error.message}` : "."}
       </Text>
     )
@@ -63,13 +66,19 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
   return (
     <>
       {showSkeleton ? (
-        <SkeletonProductGrid numberOfProducts={hitsPerPage} />
+        <SkeletonProductGrid
+          numberOfProducts={
+            productCount !== undefined
+              ? Math.min(productCount, hitsPerPage)
+              : hitsPerPage
+          }
+        />
       ) : !items.length ? (
         <Text
           className="py-16 text-center text-ui-fg-subtle"
           data-testid="no-products"
         >
-          No products matched these filters.
+          Ningún producto coincide con esos filtros.
         </Text>
       ) : (
         <ul
@@ -84,7 +93,11 @@ const StoreHits = ({ hitsPerPage, currencyCode }: StoreHitsProps) => {
                   className="group"
                 >
                   <div data-testid="product-wrapper">
-                    <Thumbnail thumbnail={hit.thumbnail} size="full" />
+                    <Thumbnail
+                      thumbnail={hit.thumbnail}
+                      size="full"
+                      title={hit.title}
+                    />
                     <div className="flex txt-compact-medium mt-4 justify-between">
                       <Text
                         className="text-ui-fg-subtle"

@@ -35,3 +35,6 @@ apps/studio-video/**/capture/
 
 # Evidencia visual de verificación (screenshots) vive en disco, no en git
 openspec/changes/*/evidence/
+
+# Build de auditoria prod (SF_DIST_DIR=.next-prod), vive en disco
+.next-prod/
