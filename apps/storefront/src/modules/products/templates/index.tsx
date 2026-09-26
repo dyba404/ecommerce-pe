@@ -35,14 +35,18 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         className="content-container  flex flex-col small:flex-row small:items-start py-6 relative"
         data-testid="product-container"
       >
-        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
+        {/* Móvil: imagen primero (es una tienda de ropa); desktop: info |
+            galería | acciones como columnas sticky. order utilities en las
+            tres columnas para que móvil y desktop tengan órdenes distintos
+            sin duplicar DOM. */}
+        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6 order-2 small:order-1">
           <ProductInfo product={product} />
           <ProductTabs product={product} />
         </div>
-        <div className="block w-full relative">
+        <div className="block w-full relative order-1 small:order-2">
           <ImageGallery images={images} productTitle={product.title} />
         </div>
-        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12">
+        <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-12 order-3">
           <ProductOnboardingCta />
           <Suspense
             fallback={

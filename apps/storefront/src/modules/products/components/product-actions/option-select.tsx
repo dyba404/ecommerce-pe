@@ -23,7 +23,12 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
 
   return (
     <div className="flex flex-col gap-y-3">
-      <span className="text-sm">Select {title}</span>
+      {/* Los títulos de opción viven en el catálogo (seed EN: Size/Color); se
+          mapean en la superficie. Si el catálogo real trae títulos ES, caen
+          en el fallback. */}
+      <span className="text-sm">
+        Elige {title === "Size" ? "talla" : title === "Color" ? "color" : title}
+      </span>
       <div
         className="flex flex-wrap justify-between gap-2"
         data-testid={dataTestId}
