@@ -135,7 +135,7 @@ const Payment = ({
             }
           )}
         >
-          Payment
+          Pago
           {!isOpen && paymentReady && <CheckCircleSolid />}
         </Heading>
         {!isOpen && paymentReady && (
@@ -145,7 +145,7 @@ const Payment = ({
               className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
               data-testid="edit-payment-button"
             >
-              Edit
+              Editar
             </button>
           </Text>
         )}

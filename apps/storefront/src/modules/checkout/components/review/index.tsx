@@ -32,7 +32,7 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
             }
           )}
         >
-          Review
+          Revisión
         </Heading>
       </div>
       {isOpen && previousStepsCompleted && (
