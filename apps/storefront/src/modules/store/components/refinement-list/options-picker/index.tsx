@@ -131,7 +131,7 @@ const OptionsPicker = ({
                     const isSelected = selectedValueIds.includes(value.id)
 
                     return (
-                      <button
+                      <button type="button"
                         key={value.id}
                         onClick={() => toggleValue(value.id)}
                         className={clsx(

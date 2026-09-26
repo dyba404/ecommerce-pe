@@ -104,7 +104,7 @@ const Register = ({ setCurrentView }: Props) => {
       </form>
       <span className="text-center text-ui-fg-base text-small-regular mt-6">
         ¿Ya tienes cuenta?{" "}
-        <button
+        <button type="button"
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
           className="underline"
         >

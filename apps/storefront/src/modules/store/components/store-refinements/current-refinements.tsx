@@ -82,7 +82,7 @@ const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
           Applied filters
         </span>
         {canClearAll && (
-          <button
+          <button type="button"
             onClick={clearAll}
             className="txt-compact-small-plus text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
             data-testid="clear-refinements"
@@ -102,7 +102,7 @@ const CurrentRefinements = ({ currencyCode }: { currencyCode: string }) => {
                 refinement.value
               }`}
             >
-              <button
+              <button type="button"
                 onClick={() => refine(refinement)}
                 aria-label={`Remove filter ${label}`}
                 className="border-ui-border-interactive text-ui-fg-base border text-small-regular h-8 rounded-rounded px-3 flex items-center gap-x-1.5 transition-colors duration-150 hover:bg-ui-bg-base-hover"

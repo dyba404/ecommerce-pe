@@ -116,7 +116,7 @@ const OptionRefinements = () => {
             <Accordion.Content className="pb-4 pt-1">
               <div className="flex flex-wrap gap-2">
                 {group.values.map((value) => (
-                  <button
+                  <button type="button"
                     key={value.value}
                     onClick={() => refine(value.value)}
                     aria-pressed={value.isRefined}

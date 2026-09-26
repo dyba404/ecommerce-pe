@@ -56,6 +56,20 @@ button:not(:disabled):active,
   transform: scale(0.97);
 }
 
+/* Reduced-motion: respeta prefers-reduced-motion sin matar el feedback de
+   estado — las transiciones/animaciones saltan al instante, el cambio de
+   color/opacity (el feedback en sí) se mantiene. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

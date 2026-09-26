@@ -140,7 +140,7 @@ const Payment = ({
         </Heading>
         {!isOpen && paymentReady && (
           <Text>
-            <button
+            <button type="button"
               onClick={handleEdit}
               className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
               data-testid="edit-payment-button"

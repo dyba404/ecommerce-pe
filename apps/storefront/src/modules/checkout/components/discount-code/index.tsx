@@ -146,6 +146,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                     </Text>
                     {!promotion.is_automatic && (
                       <button
+                        type="button"
                         className="flex items-center"
                         onClick={() => {
                           if (!promotion.code) {

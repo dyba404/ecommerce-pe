@@ -14,7 +14,7 @@ const SearchPagination = () => {
   }
 
   const renderPage = (page: number) => (
-    <button
+    <button type="button"
       key={page}
       className={clx("txt-xlarge-plus text-ui-fg-muted", {
         "text-ui-fg-base hover:text-ui-fg-subtle": page === currentRefinement,

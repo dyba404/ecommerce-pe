@@ -33,7 +33,7 @@ export function Pagination({
     label: string | number,
     isCurrent: boolean
   ) => (
-    <button
+    <button type="button"
       key={p}
       className={clx("txt-xlarge-plus text-ui-fg-muted", {
         "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,

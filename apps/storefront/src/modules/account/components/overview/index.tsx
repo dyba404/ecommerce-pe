@@ -109,7 +109,7 @@ const Overview = ({ customer, orders }: OverviewProps) => {
                                 })}
                               </span>
                             </div>
-                            <button
+                            <button type="button"
                               className="flex items-center justify-between"
                               data-testid="open-order-button"
                             >
