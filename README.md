@@ -8,6 +8,25 @@ Ecommerce elegante tipo dropshipping / DTC para mercado peruano. MVP: **solo rop
 - Specs: **OpenSpec** (`openspec/`) + `constitution.md`. Nada se construye sin proposal aprobada.
 - Skills: shadcn + taste + impeccable + emil + vercel-react-best-practices + supabase-postgres + e-commerce + tdd/browser-testing (ver `docs/03-skills.md`).
 
+## Qué aporta este repo sobre el starter
+
+Parte del [Medusa DTC Starter](https://github.com/medusajs/dtc-starter) (cart, checkout,
+cuentas, órdenes y promos no se reinventan) y añade la capa peruana propia:
+
+- **Provider de pagos Culqi custom** (`apps/backend/src/modules/culqi-payment/`): cargo +
+  3DS + RSA, y webhooks sin firma validados por re-consulta al API (nunca por el payload).
+- **Checkout con Yape** en el storefront (obligatorio en checkout PE para tickets < S/500)
+  y PagoEfectivo.
+- **Libro de Reclamaciones virtual** (Ley 29571): module backend + formulario frontend —
+  requisito legal peruano que ningún starter trae.
+- **Región PE**: PEN + IGV 18% + envíos Lima/Provincias (script `setup-pe.ts`).
+- **Búsqueda first-party** sobre Postgres con instantsearch (sin servicio externo).
+- **Notificaciones por email** con Resend (module propio).
+- **Traducción completa a español** del storefront.
+- **Rediseño móvil app-like** (navbar inferior con badge de carrito, carrusel en PDP,
+  carrito en tarjetas apiladas) verificado a 360px, y fix de CLS 1.202 → 0 con evidencia
+  Lighthouse.
+
 ## Estructura
 
 ```
@@ -28,7 +47,13 @@ ecommerce/
 
 ## Estado
 
-Fase actual: **Fase 1 (MVP ropa) en ejecución**. Fase 0 cerrada (docs 00..14 + OpenSpec). Hecho y commiteado: scaffold DTC en `apps/` (backend Medusa 2.21.1 + storefront Next 15.5/React 19/Tailwind 3.4 con búsqueda instantsearch), Docker Postgres+Redis healthy, migraciones+seed starter, `/health` 200, región PE (PEN + IGV 18% + envíos Lima/Provincias, script `setup-pe.ts`), producto TEST para E2E. Pendiente: seed real del dueño, búsqueda first-party, provider Culqi (Yape/PagoEfectivo), notificaciones, Libro de Reclamaciones, E2E. Detalle y secuencia: `docs/09-roadmap.md` + `openspec/changes/mvp-ropa/tasks.md`.
+Fase actual: **Fase 1 (MVP ropa) en ejecución**. Fase 0 cerrada (docs 00..14 + OpenSpec).
+Hecho y commiteado: scaffold DTC (backend Medusa 2.21.1 + storefront Next 15.5/React 19),
+región PE (PEN + IGV 18%), provider Culqi verificado a nivel API con las claves test del
+dueño (smoke de Yape pendiente de navegador real: el checkout-js de Culqi no monta en
+IAB), checkout con Yape, Libro de Reclamaciones, búsqueda first-party, notificaciones
+Resend, traducción ES completa y rediseño móvil. Pendiente: seed real del dueño y E2E
+automatizado. Detalle y secuencia: `docs/09-roadmap.md` + `openspec/changes/mvp-ropa/tasks.md`.
 
 ## Reglas duras
 
