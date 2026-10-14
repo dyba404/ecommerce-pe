@@ -25,4 +25,8 @@ jobs:
         run: pnpm typecheck
 
       - name: Lint
+        # check-env-variables.js (cargado por next lint) exige la publishable key.
+        # Dummy para CI; el .env real vive solo local.
+        env:
+          NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_ci_dummy
         run: pnpm lint
