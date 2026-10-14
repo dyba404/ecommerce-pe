@@ -71,7 +71,7 @@ const SearchPanel = ({ onNavigate }: { onNavigate: () => void }) => {
             className="px-4 py-6 text-center text-ui-fg-muted"
             data-testid="search-empty"
           >
-            Start typing to search for products.
+            Escribe para buscar productos.
           </Text>
         ) : status === "error" ? (
           <Text
@@ -86,7 +86,7 @@ const SearchPanel = ({ onNavigate }: { onNavigate: () => void }) => {
             className="px-4 py-6 text-center text-ui-fg-muted"
             data-testid="search-loading"
           >
-            Searching&hellip;
+            Buscando&hellip;
           </Text>
         ) : hasResults ? (
           <ul className="py-2" data-testid="search-results">
@@ -99,14 +99,14 @@ const SearchPanel = ({ onNavigate }: { onNavigate: () => void }) => {
             className="px-4 py-6 text-center text-ui-fg-muted"
             data-testid="search-loading"
           >
-            Searching&hellip;
+            Buscando&hellip;
           </Text>
         ) : (
           <Text
             className="px-4 py-6 text-center text-ui-fg-subtle"
             data-testid="search-no-results"
           >
-            No products found for &quot;{query}&quot;
+            Sin resultados para &quot;{query}&quot;
           </Text>
         )}
       </div>
