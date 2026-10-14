@@ -27,6 +27,9 @@ const SkeletonItemCard = () => {
 }
 
 const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
+  // La región PE de esta tienda fija la moneda en PEN; el fallback solo cubre
+  // el instante en que el carrito aún no carga.
+  const currencyCode = cart?.currency_code ?? "pen"
   const items = cart?.items
     ? [...cart.items].sort((a, b) => {
         return (a.created_at ?? "") > (b.created_at ?? "") ? -1 : 1
@@ -50,7 +53,7 @@ const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
                   key={item.id}
                   item={item}
                   layout="card"
-                  currencyCode={cart?.currency_code}
+                  currencyCode={currencyCode}
                 />
               )
             })
@@ -82,11 +85,11 @@ const ItemsTemplate = ({ cart }: ItemsTemplateProps) => {
             {items
               ? items.map((item) => {
                   return (
-                    <Item
-                      key={item.id}
-                      item={item}
-                      currencyCode={cart?.currency_code}
-                    />
+                      <Item
+                        key={item.id}
+                        item={item}
+                        currencyCode={currencyCode}
+                      />
                   )
                 })
               : repeat(5).map((i) => {
