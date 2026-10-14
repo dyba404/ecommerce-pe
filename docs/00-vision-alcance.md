@@ -23,4 +23,4 @@ Ecommerce elegante tipo dropshipping/DTC para Perú. Productos pequeños de env�
 
 ## Criterios de done del MVP
 - Compra completa en PEN con Culqi test (tarjeta + Yape `ype_`) y orden visible en Admin.
-- Sin Yape no hay done. Sin proposal OpenSpec aprobada no hay código.
+- Sin Yape no hay done.

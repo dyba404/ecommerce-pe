@@ -42,3 +42,4 @@ skills-lock.json
 
 # Build de auditoria prod (SF_DIST_DIR=.next-prod), vive en disco
 .next-prod/
+.opencode/

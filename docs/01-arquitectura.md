@@ -5,10 +5,8 @@
 ```
 apps/backend            Medusa v2.21.1 (scaffold create-medusa-app; incl. @medusajs/caching y src/search/)
 apps/storefront         @dtc/storefront 1.0.3: Next.js 15.5 App Router + React 19 + Tailwind 3.4 (shadcn en T7)
-apps/workers/catalog-sync   FASE 2: BullMQ + Redis (scraping → Medusa API)
-apps/studio-video           FASE 2: HyperFrames (1 carpeta por campaña)
-packages/lib-jev            FASE 2: juicios tipados + políticas puras
-openspec/  docs/  constitution.md  AGENTS.md
+apps/backend            módulos propios: culqi-payment, libro-reclamaciones, notificaciones, búsqueda
+docs/                   decisiones técnicas documentadas
 ```
 
 ## Medusa v2 (fuente: release v2.0 + docs framework)

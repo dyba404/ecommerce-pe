@@ -16,7 +16,7 @@ Todo UI se diseña **360px primero**, se escala hacia arriba. Medir con PostHog;
 
 ## QA móvil
 - `browser-testing-with-devtools` con emulación de dispositivo + Lighthouse CI en modo mobile como gate (`/opsx:verify`).
-- `impeccable audit` también en 360px; targets táctiles ≥44px; contraste y foco visibles (WCAG 2.1 AA); dark mode paritario.
+- auditoría visual en 360px; targets táctiles ≥44px; contraste y foco visibles (WCAG 2.1 AA); dark mode paritario.
 - Copy es-PE corto, precio PEN grande, CTA Yape siempre visible sin scroll.
 
 ## Anti-patrones
