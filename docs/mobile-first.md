@@ -11,7 +11,7 @@ Todo UI se diseña **360px primero**, se escala hacia arriba. Medir con PostHog;
 
 ## Performance budget móvil (gama media Android, 4G)
 - LCP < 2.5s, INP < 200ms, CLS < 0.1. Imágenes responsive AVIF/WebP + `sizes`, media en S3/Cloudinary (Fase 2).
-- Fuentes subset es-PE, JS mínimo (islas `"use client"` solo donde hay interactividad, ver `docs/01-arquitectura.md`).
+- Fuentes subset es-PE, JS mínimo (islas `"use client"` solo donde hay interactividad, ver `docs/arquitectura.md`).
 - PWA MVP: `manifest` + `theme-color` + iconos. Offline/full-PWA en Fase 2.
 
 ## QA móvil

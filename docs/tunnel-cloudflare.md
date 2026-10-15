@@ -37,4 +37,4 @@ Notas heredadas de odontoflow que aplican igual aquí:
 
 El túnel es permanente, **pero hace 502 cuando los dev servers no están corriendo** (el túnel no los levanta). Backend y storefront se arrancan como siempre (`pnpm dev` en cada app). Quien reinicie la máquina: Docker (WSL keepalive) + túnel suben solos; los dev servers se levantan al trabajar.
 
-Culqi: cuando lleguen las claves (dashboard en mantenimiento 2026-09-24), sus webhooks apuntarán a `https://api-ecommerce.marsmode.me/hooks/payment/culqi_culqi` — mismo túnel, sin nueva infra (validación por re-consulta API según `docs/04-pagos-peru.md`).
+Culqi: cuando lleguen las claves (dashboard en mantenimiento 2026-09-24), sus webhooks apuntarán a `https://api-ecommerce.marsmode.me/hooks/payment/culqi_culqi` — mismo túnel, sin nueva infra (validación por re-consulta API según `docs/pagos-peru.md`).
