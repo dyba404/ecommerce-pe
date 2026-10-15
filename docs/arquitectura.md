@@ -33,5 +33,5 @@ docs/                   decisiones técnicas documentadas
 
 ## Infra por fase
 
-- MVP: Postgres + Redis + Medusa + Storefront (VPS/Vercel+Railway/Neon según `09-roadmap`).
+- MVP: Postgres + Redis + Medusa + Storefront (VPS/Vercel+Railway/Neon según lo que decida cada deploy).
 - Fase 2: + BullMQ workers, S3/Cloudinary media, Lambda/Cloud renders HyperFrames, JEV vía TypeSafe/OpenRouter/Vercel Gateway. (Search ya quedó en MVP: first-party, ver arriba.)
